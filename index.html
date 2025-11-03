@@ -1,90 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jane Austen Popularity Visualization</title>
-  <meta name="description" content="Interactive visualization of Jane Austen's popularity over time via Tableau Public." />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fafafa;
-      color: #333;
-      text-align: center;
-    }
-    header {
-      background-color: #f2f2f2;
-      padding: 1.5em;
-      border-bottom: 1px solid #ddd;
-    }
-    h1 {
-      margin: 0;
-      font-size: 1.8em;
-    }
-    main {
-      padding: 1.5em;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .tableauPlaceholder {
-      position: relative;
-      width: 100%;
-      margin: 0 auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jane Austen Popularity Over Time | Tableau Public</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #ffe4e6 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #1f2937;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin-bottom: 30px;
+        }
+
+        .legend-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .legend-item {
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .legend-item.early {
+            background-color: #dbeafe;
+            border-left-color: #3b82f6;
+        }
+
+        .legend-item.growth {
+            background-color: #dcfce7;
+            border-left-color: #22c55e;
+        }
+
+        .legend-item.explosion {
+            background-color: #fee2e2;
+            border-left-color: #dc2626;
+        }
+
+        .legend-item h3 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .legend-item.early h3 {
+            color: #1e40af;
+        }
+
+        .legend-item.growth h3 {
+            color: #15803d;
+        }
+
+        .legend-item.explosion h3 {
+            color: #991b1b;
+        }
+
+        .legend-item p {
+            font-size: 0.8rem;
+            color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            .legend-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Jane Austen Popularity Over Time</h1>
-    <p>An interactive Tableau visualization embedded via Tableau Public.</p>
-  </header>
+    <div class="container">
+        <h1>Jane Austen's Popularity Over Time</h1>
+        <p class="subtitle">Tracking the evolution of literary fame from 1811 to 2025</p>
+        
+        <div class="chart-container">
+            <canvas id="popularityChart"></canvas>
+        </div>
 
-  <main>
-    <div class="tableauPlaceholder" id="vizJaneAusten" style="position: relative">
-      <noscript>
-        <a href="#">
-          <img alt="Jane Austen popularity chart" 
-               src="https://public.tableau.com/static/images/Ja/JaneAusten250/popularity/1_rss.png" 
-               style="border:none;" />
-        </a>
-      </noscript>
-      <object class="tableauViz" style="display:none;">
-        <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
-        <param name="embed_code_version" value="3" />
-        <param name="site_root" value="" />
-        <param name="name" value="JaneAusten250/popularity" />
-        <param name="tabs" value="no" />
-        <param name="toolbar" value="yes" />
-        <param name="static_image" 
-               value="https://public.tableau.com/static/images/Ja/JaneAusten250/popularity/1.png" />
-        <param name="animate_transition" value="yes" />
-        <param name="display_static_image" value="yes" />
-        <param name="display_spinner" value="yes" />
-        <param name="display_overlay" value="yes" />
-        <param name="display_count" value="yes" />
-        <param name="language" value="en-US" />
-      </object>
+        <div class="legend-container">
+            <div class="legend-item early">
+                <h3>Early Period (1811-1869)</h3>
+                <p>Initial publication and posthumous decline</p>
+            </div>
+            <div class="legend-item growth">
+                <h3>Growth Period (1883-1940)</h3>
+                <p>Rising recognition and cultural impact</p>
+            </div>
+            <div class="legend-item explosion">
+                <h3>Explosion Period (1950-2025)</h3>
+                <p>Mass media adaptations and global fame</p>
+            </div>
+        </div>
     </div>
-  </main>
 
-  <script type="text/javascript">
-    var divElement = document.getElementById('vizJaneAusten');
-    var vizElement = divElement.getElementsByTagName('object')[0];
-    if (divElement.offsetWidth > 800) {
-      vizElement.style.width = '100%';
-      vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-    } else if (divElement.offsetWidth > 500) {
-      vizElement.style.width = '100%';
-      vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-    } else {
-      vizElement.style.width = '100%';
-      vizElement.style.height = '727px';
-    }
-    var scriptElement = document.createElement('script');
-    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-    vizElement.parentNode.insertBefore(scriptElement, vizElement);
-  </script>
+    <script>
+        const data = [
+            { year: 1811, event: "Sense & Sensibility published", period: "Early Period", popularity: 15 },
+            { year: 1813, event: "Pride & Prejudice published", period: "Early Period", popularity: 25 },
+            { year: 1814, event: "Mansfield Park published", period: "Early Period", popularity: 30 },
+            { year: 1816, event: "Emma published", period: "Early Period", popularity: 35 },
+            { year: 1817, event: "Austen dies at 41", period: "Early Period", popularity: 20 },
+            { year: 1820, event: "Novels out of print", period: "Early Period", popularity: 10 },
+            { year: 1833, event: "Bentley collected edition", period: "Early Period", popularity: 25 },
+            { year: 1869, event: "Nephew publishes memoir", period: "Early Period", popularity: 40 },
+            { year: 1883, event: "Cheap sixpenny editions", period: "Growth Period", popularity: 50 },
+            { year: 1900, event: "Janeites emerge", period: "Growth Period", popularity: 55 },
+            { year: 1913, event: "Definitive biography", period: "Growth Period", popularity: 60 },
+            { year: 1940, event: "First major film adaptation", period: "Growth Period", popularity: 65 },
+            { year: 1950, event: "Academic recognition grows", period: "Explosion Period", popularity: 70 },
+            { year: 1995, event: "5 major adaptations released", period: "Explosion Period", popularity: 90 },
+            { year: 1997, event: "BBC Pride & Prejudice", period: "Explosion Period", popularity: 95 },
+            { year: 2000, event: "100+ printed adaptations", period: "Explosion Period", popularity: 92 },
+            { year: 2010, event: "Continued adaptations", period: "Explosion Period", popularity: 93 },
+            { year: 2017, event: "200th anniversary of death", period: "Explosion Period", popularity: 96 },
+            { year: 2025, event: "250th anniversary of birth", period: "Explosion Period", popularity: 98 }
+        ];
+
+        const periodColors = {
+            "Early Period": "#3b82f6",
+            "Growth Period": "#22c55e",
+            "Explosion Period": "#dc2626"
+        };
+
+        // Create segments for each period
+        const segments = [];
+        let currentPeriod = data[0].period;
+        let segmentData = [data[0]];
+
+        for (let i = 1; i < data.length; i++) {
+            if (data[i].period !== currentPeriod) {
+                segments.push({ period: currentPeriod, data: segmentData });
+                segmentData = [data[i]];
+                currentPeriod = data[i].period;
+            } else {
+                segmentData.push(data[i]);
+            }
+        }
+        segments.push({ period: currentPeriod, data: segmentData });
+
+        // Create datasets for each segment
+        const datasets = segments.map((segment, index) => ({
+            label: segment.period,
+            data: segment.data.map(d => ({ x: d.year, y: d.popularity, event: d.event })),
+            borderColor: periodColors[segment.period],
+            backgroundColor: periodColors[segment.period],
+            pointBackgroundColor: periodColors[segment.period],
+            pointBorderColor: periodColors[segment.period],
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            borderWidth: 3,
+            tension: 0.1,
+            spanGaps: false
+        }));
+
+        const ctx = document.getElementById('popularityChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#1f2937',
+                        bodyColor: '#4b5563',
+                        borderColor: '#d1d5db',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            title: function(context) {
+                                return 'Year: ' + context[0].parsed.x;
+                            },
+                            label: function(context) {
+                                return 'Popularity Index: ' + context.parsed.y;
+                            },
+                            afterLabel: function(context) {
+                                return context.raw.event;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        min: 1800,
+                        max: 2030,
+                        ticks: {
+                            stepSize: 10,
+                            callback: function(value) {
+                                return value;
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Year',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: '#e5e7eb'
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Popularity Index',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: '#e5e7eb'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
