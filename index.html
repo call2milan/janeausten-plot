@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jane Austen Popularity Over Time | Tableau Public</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <style>
         * {
@@ -112,7 +111,7 @@
 <body>
     <div class="container">
         <h1>Jane Austen's Popularity Over Time</h1>
-        <p class="subtitle">From modest beginnings to literary icon (1811-2025)</p>
+        <p class="subtitle">Tracking the evolution of literary fame from 1811 to 2025</p>
         
         <div class="chart-container">
             <canvas id="popularityChart"></canvas>
@@ -133,7 +132,12 @@
             </div>
         </div>
     </div>
-
+<section id="footnotes">
+  <h3>Credits/Source</h3>
+  <ol>
+      The dataset was generated using Claude AI based on the qualitative historical information of Jane Austen's literary reception.
+  </ol>
+</section>
     <script>
         const data = [
             { year: 1811, event: "Sense & Sensibility published", period: "Early Period", popularity: 15 },
